@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const twilio = require('twilio');
@@ -7,21 +8,21 @@ const app = express();
 const server = http.createServer(app);
 
 // Replace these values with your Twilio Account SID and Auth Token
-const TWILIO_ACCOUNT_SID = 'ACd934ed3718943b611bce68b71e7b274b';
-const TWILIO_AUTH_TOKEN = '3f158637454ecf3170ce30aeb363da10';
+const TwilioAccountSID = process.env.TWILIO_ACCOUNT_SID;
+const TwilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
 
 // Replace these numbers with your main IVR number and the number to forward to
 const MAIN_IVR_NUMBER = '+17043135714';
 const FORWARD_TO_NUMBER = '+923365500513';
 
 // MongoDB connection URL and options
-const MONGODB_URL = 'mongodb+srv://hammad_shah:<password>@cluster0.mejjc0a.mongodb.net/?retryWrites=true&w=majority'; // Replace with your MongoDB connection URL
+const mongoURL = process.env.MONGODB_URL; // Replace with your MongoDB connection URL
 const MONGODB_OPTIONS = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-mongoose.connect(MONGODB_URL, MONGODB_OPTIONS);
+mongoose.connect(mongoURL, MONGODB_OPTIONS);
 
 // Define a schema for call logs
 const CallLogSchema = new mongoose.Schema({
@@ -34,7 +35,7 @@ const CallLogSchema = new mongoose.Schema({
 const CallLog = mongoose.model('CallLog', CallLogSchema);
 
 // Create a Twilio client
-const client = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+const client = new twilio(TwilioAccountSID, TwilioAuthToken);
 
 app.use(express.urlencoded({ extended: true }));
 
